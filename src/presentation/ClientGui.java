@@ -8,26 +8,26 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
 
-public class ClientGui extends JFrame {
+public class ClientGui extends JPanel {
     private final ClientService service = new ClientService();
     private JTable table;
 
     public ClientGui() {
-        setTitle("Client Manager");
+
         setSize(600, 400);
         setLayout(new BorderLayout());
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
 
         JPanel topPanel = new JPanel();
         JButton add = new JButton("Add Client");
         JButton edit = new JButton("Edit Client");
         JButton delete = new JButton("Delete Client");
-        JButton refresh = new JButton("Refresh");
+
 
         topPanel.add(add);
         topPanel.add(edit);
         topPanel.add(delete);
-        topPanel.add(refresh);
+
 
         table = new JTable();
         refreshTable();
@@ -35,10 +35,10 @@ public class ClientGui extends JFrame {
         add(topPanel, BorderLayout.NORTH);
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-        add.addActionListener(this::handleAdd);
+        add.addActionListener(e->handleAdd(e));
         edit.addActionListener(e -> handleEdit());
         delete.addActionListener(e -> handleDelete());
-        refresh.addActionListener(e -> refreshTable());
+
 
         setVisible(true);
     }

@@ -4,13 +4,11 @@ import model.Bill;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+
 
 /**
- * DAO special pentru Bill permite doar inserare si citire.
+ * DAO special pentru Bill permite doar inserare
  */
 public class BillDao {
 
@@ -40,36 +38,4 @@ public class BillDao {
 
         return false;
     }
-
-    /**
-     * Returneaza toate facturile din Log.
-     *
-     * @return lista facturilor
-     */
-    public List<Bill> findAll() {
-        List<Bill> bills = new ArrayList<>();
-        String sql = "SELECT client_name, product_name, quantity, total_price FROM Log";
-
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                Bill bill = new Bill(
-                        rs.getString("client_name"),
-                        rs.getString("product_name"),
-                        rs.getInt("quantity"),
-                        rs.getDouble("total_price")
-                );
-                bills.add(bill);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return bills;
-    }
-
-
 }

@@ -8,30 +8,51 @@ import model.Bill;
 import model.Client;
 import model.Order;
 import model.Product;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class OrderGui extends JFrame {
+public class OrderGui extends JPanel {
     private final OrderService orderService = new OrderService();
     private final ClientService clientService = new ClientService();
     private final ProductService productService = new ProductService();
     private final BillDao billDAO = new BillDao();
+    private final ProductGui productGui;
 
-    public OrderGui() {
-        setTitle("Order Manager");
-        setSize(500, 300);
+    public OrderGui(ProductGui productGui) {
+        this.productGui = productGui;
+
         setLayout(new GridLayout(5, 2));
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
 
         JComboBox<Client> clientBox = new JComboBox<>(clientService.getAllClients().toArray(new Client[0]));
-        JComboBox<Product> productBox = new JComboBox<>(productService.getAllProducts().toArray(new Product[0]));
+
+        Product[] products = productService.getAllProducts().toArray(new Product[0]);
+        JComboBox<Product> productBox = new JComboBox<>(products);
+
+
+        productBox.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Product) {
+                    Product p = (Product) value;
+                    value = p.getName() + " (Stock: " + p.getStock() + ")";
+                }
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
+
         JTextField quantityField = new JTextField();
         JButton placeOrder = new JButton("Place Order");
 
-        add(new JLabel("Client:")); add(clientBox);
-        add(new JLabel("Product:")); add(productBox);
-        add(new JLabel("Quantity:")); add(quantityField);
-        add(new JLabel()); add(placeOrder);
+        add(new JLabel("Client:"));
+        add(clientBox);
+        add(new JLabel("Product:"));
+        add(productBox);
+        add(new JLabel("Quantity:"));
+        add(quantityField);
+        add(new JLabel());
+        add(placeOrder);
 
         placeOrder.addActionListener(e -> {
             Client c = (Client) clientBox.getSelectedItem();
@@ -54,6 +75,7 @@ public class OrderGui extends JFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "Order failed.");
             }
+            productGui.refreshTable();
         });
 
         setVisible(true);

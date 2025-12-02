@@ -8,26 +8,26 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
 
-public class ProductGui extends JFrame {
+public class ProductGui extends JPanel {
     private final ProductService service = new ProductService();
     private JTable table;
 
     public ProductGui() {
-        setTitle("Product Manager");
-        setSize(700, 400);
+
+
         setLayout(new BorderLayout());
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
 
         JPanel topPanel = new JPanel();
         JButton add = new JButton("Add Product");
         JButton edit = new JButton("Edit Product");
         JButton delete = new JButton("Delete Product");
-        JButton refresh = new JButton("Refresh");
+
 
         topPanel.add(add);
         topPanel.add(edit);
         topPanel.add(delete);
-        topPanel.add(refresh);
+
 
         table = new JTable();
         refreshTable();
@@ -35,12 +35,12 @@ public class ProductGui extends JFrame {
         add(topPanel, BorderLayout.NORTH);
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-        add.addActionListener(this::handleAdd);
+        add.addActionListener(e->handleAdd(e));
         edit.addActionListener(e -> handleEdit());
         delete.addActionListener(e -> handleDelete());
-        refresh.addActionListener(e -> refreshTable());
 
-        setVisible(true);
+
+
     }
 
     private void handleAdd(ActionEvent e) {
@@ -116,7 +116,7 @@ public class ProductGui extends JFrame {
         }
     }
 
-    private void refreshTable() {
+    public void refreshTable() {
         List<Product> products = service.getAllProducts();
         TableHelper.populateTable(table, products, Product.class);
     }

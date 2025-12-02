@@ -1,30 +1,57 @@
 package presentation;
+
 import javax.swing.*;
 import java.awt.*;
 
-
 public class MainWindow extends JFrame {
+    private JPanel cardsPanel;
+    private ProductGui productGui;
+    private ClientGui clientGui;
+    private OrderGui orderGui;
+
     public MainWindow() {
-        setTitle("App");
-        setSize(400, 200);
-        setLayout(new GridLayout(3, 1));
+        setTitle("Management App");
+        setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
-        JButton clients = new JButton("Manage Clients");
-        JButton products = new JButton("Manage Products");
-        JButton orders = new JButton("Place Order");
+        cardsPanel = new JPanel(new CardLayout());
 
-        add(clients);
-        add(products);
-        add(orders);
 
-        clients.addActionListener(e -> new ClientGui());
-        products.addActionListener(e -> new ProductGui());
-        orders.addActionListener(e -> new OrderGui());
+        productGui = new ProductGui();
+        clientGui = new ClientGui();
+        orderGui = new OrderGui(productGui);
+
+        cardsPanel.add(productGui, "PRODUCTS");
+        cardsPanel.add(clientGui, "CLIENTS");
+        cardsPanel.add(orderGui, "ORDERS");
+
+
+        JPanel menuPanel = new JPanel(new GridLayout(1, 3));
+        JButton btnProducts = new JButton("Products");
+        JButton btnClients = new JButton("Clients");
+        JButton btnOrders = new JButton("Orders");
+
+        btnProducts.addActionListener(e -> showCard("PRODUCTS"));
+        btnClients.addActionListener(e -> showCard("CLIENTS"));
+        btnOrders.addActionListener(e -> showCard("ORDERS"));
+
+        menuPanel.add(btnProducts);
+        menuPanel.add(btnClients);
+        menuPanel.add(btnOrders);
+
+        add(menuPanel, BorderLayout.NORTH);
+        add(cardsPanel, BorderLayout.CENTER);
 
         setVisible(true);
     }
+
+    private void showCard(String name) {
+        CardLayout cl = (CardLayout) cardsPanel.getLayout();
+        cl.show(cardsPanel, name);
+    }
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new MainWindow());
+        SwingUtilities.invokeLater(MainWindow::new);
     }
 }

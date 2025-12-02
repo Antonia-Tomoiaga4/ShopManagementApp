@@ -11,8 +11,23 @@ public class TableHelper {
             Field[] fields = clazz.getDeclaredFields();
             String[] columnNames = new String[fields.length];
 
+
+            int start = 0;
             for (int i = 0; i < fields.length; i++) {
-                columnNames[i] = fields[i].getName();
+                if (fields[i].getName().equalsIgnoreCase("id") || fields[i].getName().toLowerCase().contains("id")) {
+                    columnNames[0] = fields[i].getName();
+                    Field temp = fields[i];
+                    fields[i] = fields[0];
+                    fields[0] = temp;
+                    start = 1;
+                    break;
+                }
+            }
+
+            for (int i = start; i < fields.length; i++) {
+                if (columnNames[i] == null) {
+                    columnNames[i] = fields[i].getName();
+                }
             }
 
             Object[][] data = new Object[list.size()][fields.length];
@@ -31,4 +46,5 @@ public class TableHelper {
             e.printStackTrace();
         }
     }
+
 }

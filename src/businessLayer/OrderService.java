@@ -13,7 +13,7 @@ public class OrderService {
      */
     private final GenericDao<Order> orderDao = new GenericDao<>(Order.class);
     /**
-     * obiect productservice care verifica si actualizeaza stocul cand se face o comanda
+     * obiect product service care verifica si actualizeaza stocul cand se face o comanda
      */
     private final ProductService productService = new ProductService();
 
@@ -36,18 +36,4 @@ public class OrderService {
         return ok;
     }
 
-    /**
-     * @return toate comenziile din bd
-     */
-    public List<Order> getAllOrders() {
-        return orderDao.findAll();
-    }
-
-    /**\
-     * @param id
-     * @return sterge o comanda dupa id
-     */
-    public boolean deleteOrder(int id) {
-        return orderDao.delete(id);
-    }
 }
